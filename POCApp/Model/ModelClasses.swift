@@ -9,10 +9,10 @@
 import Foundation
 
 struct Response:Decodable {
-    let rows:[rows]
+    let rows:[Rows]
     let title: String?
 }
-struct rows:Decodable {
+struct Rows:Decodable {
     let title:String?
     let description:String?
     let imageHref:String?
