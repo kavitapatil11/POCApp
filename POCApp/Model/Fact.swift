@@ -12,6 +12,7 @@ struct Response:Decodable {
     let rows:[Rows]
     let title: String?
 }
+
 struct Rows:Decodable {
     let title:String?
     let description:String?

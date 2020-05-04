@@ -8,11 +8,13 @@
 
 import UIKit
 
-class ViewController: UIViewController {
+class HomeViewController: UIViewController {
     // MARK: - Variables and IBOutlets
     let factsTableView = UITableView()
     var safeArea: UILayoutGuide!
-    var rowsList = [Rows]()
+    //var rowsList = [Rows]()
+    var factsList = [FactsViewModel]()
+    
     let cellId = "cellId"
     
     override func viewDidLoad() {
@@ -22,14 +24,16 @@ class ViewController: UIViewController {
         setupTableView()
         fetchData()
     }
-    //MARK: - Fetch data
+    
+     //MARK: - Fetch data
     func fetchData() {
-        let factViewModel = FactsViewModel()
-        factViewModel.parseJson(completionHandler: {
+        let services = Services()
+        services.parseJson(completionHandler: {
             data,title  in
             if data != nil
             {
-                self.rowsList = data!
+                // self.factsList = data!.map(FactsViewModel(r))
+                self.factsList = data?.map({return FactsViewModel(rows: $0)}) ?? []
                 DispatchQueue.main.async {
                     self.title = title
                     self.factsTableView.reloadData()
@@ -53,17 +57,18 @@ class ViewController: UIViewController {
         factsTableView  .rightAnchor.constraint(equalTo: view.rightAnchor).isActive = true
     }
 }
+
 // MARK: - TableView Delegate and DataSource Methods
-extension ViewController: UITableViewDataSource,UITableViewDelegate {
+extension HomeViewController: UITableViewDataSource,UITableViewDelegate {
     public func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return rowsList.count
+        return factsList.count
     }
     
     public func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let currentRow = rowsList[indexPath.row]
+        let currentRow = factsList[indexPath.row]
         let cell = tableView.dequeueReusableCell(withIdentifier: cellId, for: indexPath) as! RowDetailTableViewCell
         cell.selectionStyle = .none
-        cell.rows = currentRow
+        cell.factViewModel = currentRow
         return cell
     }
     

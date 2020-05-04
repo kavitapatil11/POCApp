@@ -10,22 +10,15 @@ import UIKit
 
 class RowDetailTableViewCell: UITableViewCell {
     
-    var rows: Rows? {
+    var factViewModel: FactsViewModel! {
         didSet {
-            if rows?.imageHref != nil{
-                factsImage.downloaded(from: rows?.imageHref ?? "", contentMode: .scaleAspectFit)
-            } else {
-                //factsImage = UIImageView(image: #imageLiteral(resourceName: "placeholder"))
-            }
-            if rows?.title != nil {
-                titleLabel.text = rows?.title
-            }
-            if rows?.description != nil {
-                descriptionLabel.text = rows?.description
-            }
+            factsImage.downloaded(from: factViewModel.factimage ?? "", contentMode: .scaleAspectFit)
+            titleLabel.text = factViewModel.factTitle
+            descriptionLabel.text = factViewModel.factDescription
             
         }
     }
+    
     private let titleLabel: UILabel = {
         let lbl = UILabel()
         lbl.textColor = UIColor.green
@@ -64,10 +57,12 @@ class RowDetailTableViewCell: UITableViewCell {
         descriptionLabel.anchor(top: titleLabel.bottomAnchor, left: factsImage.rightAnchor, bottom: bottomAnchor, right: rightAnchor, paddingTop: 0, paddingLeft: 10, paddingBottom: 30, paddingRight: 20, width: frame.size.width , height: 0, enableInsets: false)
         
     }
+    
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
         
     }
+    
     override func prepareForReuse() {
         factsImage.image = UIImage(named: "placeholder")
     }
